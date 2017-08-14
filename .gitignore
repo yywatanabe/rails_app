@@ -23,6 +23,3 @@ doc/
 
 # Ignore Spring files.
 /spring/*.pid
-
-# Ignore procfile
-/Procfile
