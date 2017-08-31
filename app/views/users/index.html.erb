@@ -1,10 +1,35 @@
-<% provide(:title, 'All users') %>
-<h1>All users</h1>
-
-<%= will_paginate %>
-
-<ul class="users">
-  <%= render @users %>
-</ul>
-
-<%= will_paginate %>
+<% provide(:title, 'users') %>
+<h1>Users</h1>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= search_form_for(@q, method: :get) do |f| %>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <%= f.label :name_cont %>
+            <%= f.text_field :name_cont, class: "form-control", placeholder: "keyword" %>
+          </div>
+        </div>
+      </div>
+      <%= f.submit 'Search', class: "btn btn-primary" %>
+      <%= link_to 'Clear', url_for, class: "btn btn-default" %>
+    <% end %>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <ul class="users">
+        <%  @userSearchResult.each do |result| %>
+        <li>
+        <%= gravatar_for result, size: 50 %>
+        <%= link_to result.name, user_path(result) %>
+        <% if current_user.admin? && !current_user?(result) %>
+        | <%= link_to "delete", user_path(result), method: :delete,
+                                  data: { confirm: "You sure?" } %>
+        <% end %>
+        </li>
+        <% end %>
+        <%= will_paginate @userSearchResult %>
+      </ul>
+    </div>
+  </div>
+</div>
